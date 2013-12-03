@@ -4,10 +4,11 @@ namespace webignition\Tests\HtmlFragmentExtractor;
 
 use webignition\HtmlFragmentExtractor\HtmlFragmentExtractor;
 
-class TestTest extends BaseTest { 
+class SetColumnNumberTest extends BaseTest { 
     
-    public function testTest() {
+    public function testSetColumnNumberReturnsSelf() {
         $extractor = new HtmlFragmentExtractor();
+        $this->assertEquals($extractor, $extractor->setColumnNumber(1));
     }
     
-}
+};
