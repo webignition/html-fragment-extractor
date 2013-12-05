@@ -1,6 +1,6 @@
 <?php
 
-namespace webignition\Tests\HtmlFragmentExtractor\GetFragment\WithScope\Element;
+namespace webignition\Tests\HtmlFragmentExtractor\GetFragment;
 
 use webignition\HtmlFragmentExtractor\HtmlFragmentExtractor;
 use webignition\HtmlFragmentExtractor\Configuration;
@@ -14,7 +14,6 @@ class AgainstSampleDocumentTest extends BaseTest {
         $configuration->setLineNumber(8);
         $configuration->setColumnNumber(20);
         $configuration->setHtmlContent($this->getFixture('sample01.html'));  
-        $configuration->setScope(Configuration::SCOPE_ELEMENT);
         
         $extractor = new HtmlFragmentExtractor();
         $extractor->setConfiguration($configuration);        
@@ -31,7 +30,6 @@ class AgainstSampleDocumentTest extends BaseTest {
         $configuration->setLineNumber(5);
         $configuration->setColumnNumber(18);
         $configuration->setHtmlContent($this->getFixture('sample01.html'));  
-        $configuration->setScope(Configuration::SCOPE_ELEMENT);
         
         $extractor = new HtmlFragmentExtractor();
         $extractor->setConfiguration($configuration);          
@@ -48,7 +46,6 @@ class AgainstSampleDocumentTest extends BaseTest {
         $configuration->setLineNumber(6);
         $configuration->setColumnNumber(31);
         $configuration->setHtmlContent($this->getFixture('sample01.html'));  
-        $configuration->setScope(Configuration::SCOPE_ELEMENT);
         
         $extractor = new HtmlFragmentExtractor();
         $extractor->setConfiguration($configuration);         
@@ -65,7 +62,6 @@ class AgainstSampleDocumentTest extends BaseTest {
         $configuration->setLineNumber(4);
         $configuration->setColumnNumber(20);
         $configuration->setHtmlContent($this->getFixture('sample01.html'));  
-        $configuration->setScope(Configuration::SCOPE_ELEMENT);
         
         $extractor = new HtmlFragmentExtractor();
         $extractor->setConfiguration($configuration);         
@@ -82,7 +78,6 @@ class AgainstSampleDocumentTest extends BaseTest {
         $configuration->setLineNumber(59);
         $configuration->setColumnNumber(27);
         $configuration->setHtmlContent($this->getFixture('sample01.html'));  
-        $configuration->setScope(Configuration::SCOPE_ELEMENT);
         
         $extractor = new HtmlFragmentExtractor();
         $extractor->setConfiguration($configuration);         

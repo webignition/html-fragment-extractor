@@ -2,25 +2,7 @@
 
 namespace webignition\HtmlFragmentExtractor;
 
-class Configuration {
-    
-    const SCOPE_AUTO = 'auto';
-    const SCOPE_ELEMENT = 'element';
-    const SCOPE_PARENT = 'parent';
-    const SCOPE_GRANDPARENT = 'grandparent';
-    
-    /**
-     * Collection of allowed scope values
-     * 
-     * @var array
-     */
-    private $allowedScopes = array(
-        self::SCOPE_AUTO,
-        self::SCOPE_ELEMENT,
-        self::SCOPE_PARENT,
-        self::SCOPE_GRANDPARENT        
-    );
-    
+class Configuration {    
     
     /**
      *
@@ -47,15 +29,7 @@ class Configuration {
      *
      * @var array
      */
-    private $htmlContentLines = null;
-    
-    
-    /**
-     *
-     * @var string
-     */
-    private $scope = self::SCOPE_AUTO;
-    
+    private $htmlContentLines = null;    
     
 
     /**
@@ -141,21 +115,5 @@ class Configuration {
      */
     public function getHtmlContent() {
         return $this->htmlContent;
-    }
-    
-    
-    /**
-     * 
-     * @param string $scope
-     * @return \webignition\HtmlFragmentExtractor\HtmlFragmentExtractor
-     * @throws \UnexpectedValueException
-     */
-    public function setScope($scope) {
-        if (!in_array($scope, $this->allowedScopes)) {
-            throw new \UnexpectedValueException('Scope "'.$scope.'" is not valid', 6);
-        }
-        
-        $this->scope = $scope;
-        return $this;
     }
 } 
