@@ -19,7 +19,9 @@ class AgainstW3cValidatorResultsTest extends BaseTest {
         
         $this->assertEquals(array(
             'offset' => 12,
-            'fragment' => '<body  lang="es" id="cms">'
+            'fragment' => '<body  lang="es" id="cms">',
+            'isLeftTruncated' => false,
+            'isRightTruncated' => false                
         ), $extractor->getFragment());           
     }
     
@@ -35,7 +37,9 @@ class AgainstW3cValidatorResultsTest extends BaseTest {
         
         $this->assertEquals(array(
             'offset' => 117,
-            'fragment' => '<div style="float:left; width:38px; height:27px;border:1px solid #000000;  background-color:#FFFF00;margin-right:2px"></div>'
+            'fragment' => '<div style="float:left; width:38px; height:27px;border:1px solid #000000;  background-color:#FFFF00;margin-right:2px"></div>',
+            'isLeftTruncated' => false,
+            'isRightTruncated' => false                
         ), $extractor->getFragment());           
     }      
 };
