@@ -3,15 +3,19 @@
 namespace webignition\Tests\HtmlFragmentExtractor\GetFragment;
 
 use webignition\HtmlFragmentExtractor\HtmlFragmentExtractor;
+use webignition\HtmlFragmentExtractor\Configuration;
 use webignition\Tests\HtmlFragmentExtractor\BaseTest;
 
 class AgainstW3cValidatorResultsTest extends BaseTest {    
     
     public function testAgainstW3cHtmlValidatorOutput01() {
+        $configuration = new Configuration();
+        $configuration->setLineNumber(59);
+        $configuration->setColumnNumber(14);
+        $configuration->setHtmlContent($this->getFixture('sample02.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(59);
-        $extractor->setColumnNumber(14);
-        $extractor->setHtmlContent($this->getFixture('sample02.html'));
+        $extractor->setConfiguration($configuration); 
         
         $this->assertEquals(array(
             'offset' => 12,
@@ -21,10 +25,13 @@ class AgainstW3cValidatorResultsTest extends BaseTest {
     
     
     public function testAgainstW3cHtmlValidatorOutput02() {
+        $configuration = new Configuration();
+        $configuration->setLineNumber(115);
+        $configuration->setColumnNumber(121);
+        $configuration->setHtmlContent($this->getFixture('sample02.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(115);
-        $extractor->setColumnNumber(121);
-        $extractor->setHtmlContent($this->getFixture('sample02.html'));
+        $extractor->setConfiguration($configuration);
         
         $this->assertEquals(array(
             'offset' => 117,

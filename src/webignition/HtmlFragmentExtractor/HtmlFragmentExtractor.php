@@ -2,46 +2,9 @@
 
 namespace webignition\HtmlFragmentExtractor;
 
+use webignition\HtmlFragmentExtractor\Configuration;
+
 class HtmlFragmentExtractor {
-    
-    const SCOPE_AUTO = 'auto';
-    const SCOPE_ELEMENT = 'element';
-    const SCOPE_PARENT = 'parent';
-    const SCOPE_GRANDPARENT = 'grandparent';
-    
-    /**
-     * Collection of allowed scope values
-     * 
-     * @var array
-     */
-    private $allowedScopes = array(
-        self::SCOPE_AUTO,
-        self::SCOPE_ELEMENT,
-        self::SCOPE_PARENT,
-        self::SCOPE_GRANDPARENT        
-    );
-    
-    
-    /**
-     *
-     * @var int
-     */
-    private $lineNumber = null;
-    
-    
-    /**
-     *
-     * @var int
-     */
-    private $columnNumber = null;
-    
-    
-    /**
-     *
-     * @var string
-     */
-    private $htmlContent = null;
-    
     
     /**
      *
@@ -52,96 +15,34 @@ class HtmlFragmentExtractor {
     
     /**
      *
-     * @var string
+     * @var \webignition\HtmlFragmentExtractor\Configuration 
      */
-    private $scope = self::SCOPE_AUTO;
-    
-    
+    private $configuration = null;
 
+    
     /**
      * 
-     * @param int $lineNumber
+     * @param \webignition\HtmlFragmentExtractor\Configuration $configuration
      * @return \webignition\HtmlFragmentExtractor\HtmlFragmentExtractor
-     * @throws \InvalidArgumentException
      */
-    public function setLineNumber($lineNumber) {
-        $lineNumber = filter_var($lineNumber, FILTER_VALIDATE_INT);
-        if ($lineNumber === false) {
-            throw new \InvalidArgumentException('Line number is not a number', 1);
-        }
-        
-        if ($lineNumber < 1) {
-            throw new \InvalidArgumentException('Line number must be 1 or greater', 2);
-        }
-        
-        $this->lineNumber = $lineNumber;
+    public function setConfiguration(Configuration $configuration) {
+        $this->configuration = $configuration;
         return $this;
     }
     
     
     /**
      * 
-     * @return int
+     * @return \webignition\HtmlFragmentExtractor\Configuration
      */
-    public function getLineNumber() {
-        return $this->lineNumber;
-    }
-    
-    
-    /**
-     * 
-     * @param int $columnNumber
-     * @return \webignition\HtmlFragmentExtractor\HtmlFragmentExtractor
-     * @throws \InvalidArgumentException
-     */
-    public function setColumnNumber($columnNumber) {
-        $columnNumber = filter_var($columnNumber, FILTER_VALIDATE_INT);
-        if ($columnNumber === false) {
-            throw new \InvalidArgumentException('Column number is not a number', 3);
+    public function getConfiguration() {
+        if (is_null($this->configuration)) {
+            throw new \RuntimeException('Configuration not set', 1);
         }
         
-        if ($columnNumber < 1) {
-            throw new \InvalidArgumentException('Column number must be 1 or greater', 4);
-        }
-        
-        $this->columnNumber = $columnNumber;
-        return $this;
+        return $this->configuration;
     }
-    
-    
-    /**
-     * 
-     * @return int
-     */
-    public function getColumnNumber() {
-        return $this->columnNumber;
-    }
-    
-    
-    /**
-     * 
-     * @param string $htmlContent
-     * @return \webignition\HtmlFragmentExtractor\HtmlFragmentExtractor
-     * @throws \InvalidArgumentException
-     */
-    public function setHtmlContent($htmlContent) {
-        if (!is_string($htmlContent)) {
-            throw new \InvalidArgumentException('HTML content must be a string', 5);
-        }
-        
-        $this->htmlContent = $htmlContent;
-        $this->htmlContentLines = null;
-        return $this;
-    }
-    
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getHtmlContent() {
-        return $this->htmlContent;
-    }
+
     
     
     /**
@@ -150,19 +51,49 @@ class HtmlFragmentExtractor {
      * @throws \OutOfBoundsException
      */
     public function getFragment() { 
-        $lines = $this->getLines();
-        if (is_null($this->getLineIndex()) || !array_key_exists($this->getLineIndex(), $lines)) {
-            throw new \OutOfBoundsException('Given line ('.$this->getLineNumber().') not present in HTML content', 1);
-        }        
-        
-        $line = $lines[$this->getLineIndex()];
-        
-        if (is_null($this->getColumnNumber()) || $this->getColumnNumber() > mb_strlen($line)) {
-            throw new \OutOfBoundsException('Given column ('.$this->getColumnNumber().' not present in line '.$this->getLineNumber().')', 2);
+        if (!$this->hasLine()) {
+            throw new \OutOfBoundsException('Given line ('.$this->getConfiguration()->getLineNumber().') not present in HTML content', 1);
         }
         
+        if (!$this->hasColumn()) {
+            throw new \OutOfBoundsException('Given column ('.$this->getConfiguration()->getColumnNumber().' not present in line '.$this->getConfiguration()->getLineNumber().')', 2);
+        }
+
+        
         $parser = new Parser();
-        return $parser->parse($this->htmlContent, $this->getLineNumber(), $this->getColumnNumber());
+        return $parser->parse($this->getConfiguration()->getHtmlContent(), $this->getConfiguration()->getLineNumber(), $this->getConfiguration()->getColumnNumber());
+    }
+    
+    
+    /**
+     * 
+     * @return boolean
+     */
+    private function hasLine() {
+        return !is_null($this->getLine());
+    }
+    
+    
+    /**
+     * 
+     * @return boolean
+     */
+    private function hasColumn() {
+        if (is_null($this->getConfiguration()->getColumnNumber())) {
+            return false;
+        }  
+        
+        return $this->getConfiguration()->getColumnNumber() <= mb_strlen($this->getLine());
+    }    
+    
+    
+    /**
+     * 
+     * @return string
+     */
+    private function getLine() {
+        $lines = $this->getLines();
+        return isset($lines[$this->getLineIndex()]) ? $lines[$this->getLineIndex()] : null;
     }
     
     
@@ -171,11 +102,11 @@ class HtmlFragmentExtractor {
      * @return int
      */
     private function getLineIndex() {
-        if (is_null($this->getLineNumber())) {
+        if (is_null($this->getConfiguration()->getLineNumber())) {
             return null;
         }
         
-        return $this->getLineNumber() - 1;
+        return $this->getConfiguration()->getLineNumber() - 1;
     }
     
     
@@ -185,25 +116,10 @@ class HtmlFragmentExtractor {
      */
     private function getLines() {
         if (is_null($this->htmlContentLines)) {
-            $this->htmlContentLines = explode("\n", $this->htmlContent);
+            $this->htmlContentLines = explode("\n", $this->getConfiguration()->getHtmlContent());
         }
         
         return $this->htmlContentLines;
     }
     
-    
-    /**
-     * 
-     * @param string $scope
-     * @return \webignition\HtmlFragmentExtractor\HtmlFragmentExtractor
-     * @throws \InvalidArgumentException
-     */
-    public function setScope($scope) {
-        if (!in_array($scope, $this->allowedScopes)) {
-            throw new \InvalidArgumentException('Scope "'.$scope.'" is not valid', 6);
-        }
-        
-        $this->scope = $scope;
-        return $this;
-    }
 } 

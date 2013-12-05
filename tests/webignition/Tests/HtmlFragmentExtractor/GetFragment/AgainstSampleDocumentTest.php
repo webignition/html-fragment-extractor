@@ -3,6 +3,8 @@
 namespace webignition\Tests\HtmlFragmentExtractor\GetFragment;
 
 use webignition\HtmlFragmentExtractor\HtmlFragmentExtractor;
+use webignition\HtmlFragmentExtractor\Configuration;
+
 use webignition\Tests\HtmlFragmentExtractor\BaseTest;
 
 class AgainstSampleDocumentTest extends BaseTest { 
@@ -10,10 +12,13 @@ class AgainstSampleDocumentTest extends BaseTest {
     public function testOutOfBoundsLineNumberThrowsOutOfBoundsException() {
         $this->setExpectedException('OutOfBoundsException', 'Given line (500) not present in HTML content', 1);
         
+        $configuration = new Configuration();
+        $configuration->setLineNumber(500);
+        $configuration->setColumnNumber(20);
+        $configuration->setHtmlContent($this->getFixture('sample01.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(500);
-        $extractor->setColumnNumber(20);
-        $extractor->setHtmlContent($this->getFixture('sample01.html'));
+        $extractor->setConfiguration($configuration);
         
         $extractor->getFragment();
     }   
@@ -22,20 +27,26 @@ class AgainstSampleDocumentTest extends BaseTest {
     public function testOutOfBoundsColumnNumberThrowsOutOfBoundsException() {
         $this->setExpectedException('OutOfBoundsException', 'Given column (200 not present in line 4)', 2);
         
+        $configuration = new Configuration();
+        $configuration->setLineNumber(4);
+        $configuration->setColumnNumber(200);
+        $configuration->setHtmlContent($this->getFixture('sample01.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(4);
-        $extractor->setColumnNumber(200);
-        $extractor->setHtmlContent($this->getFixture('sample01.html'));
+        $extractor->setConfiguration($configuration);
         
         $extractor->getFragment();
     }     
     
     
-    public function testGetFromLineContainingSingleElementTag() {
+    public function testGetFromLineContainingSingleElementTag() {        
+        $configuration = new Configuration();
+        $configuration->setLineNumber(8);
+        $configuration->setColumnNumber(20);
+        $configuration->setHtmlContent($this->getFixture('sample01.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(8);
-        $extractor->setColumnNumber(20);
-        $extractor->setHtmlContent($this->getFixture('sample01.html'));
+        $extractor->setConfiguration($configuration);        
         
         $this->assertEquals(array(
             'offset' => 11,
@@ -45,10 +56,13 @@ class AgainstSampleDocumentTest extends BaseTest {
     
     
     public function testGetFromFirstLineOfMultilineElement() {
+        $configuration = new Configuration();
+        $configuration->setLineNumber(5);
+        $configuration->setColumnNumber(18);
+        $configuration->setHtmlContent($this->getFixture('sample01.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(5);
-        $extractor->setColumnNumber(18);
-        $extractor->setHtmlContent($this->getFixture('sample01.html'));
+        $extractor->setConfiguration($configuration);          
         
         $this->assertEquals(array(
             'offset' => 9,
@@ -57,11 +71,14 @@ class AgainstSampleDocumentTest extends BaseTest {
         ), $extractor->getFragment());
     }    
     
-    public function testGetFromSecondLineOfMultilineElement() {
+    public function testGetFromSecondLineOfMultilineElement() {        
+        $configuration = new Configuration();
+        $configuration->setLineNumber(6);
+        $configuration->setColumnNumber(31);
+        $configuration->setHtmlContent($this->getFixture('sample01.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(6);
-        $extractor->setColumnNumber(31);
-        $extractor->setHtmlContent($this->getFixture('sample01.html'));
+        $extractor->setConfiguration($configuration);         
         
         $this->assertEquals(array(
             'offset' => 62,
@@ -70,11 +87,14 @@ class AgainstSampleDocumentTest extends BaseTest {
         ), $extractor->getFragment());
     }     
     
-    public function testGetFromLineContainingSingleStartTagAndSingleEndTag() {
+    public function testGetFromLineContainingSingleStartTagAndSingleEndTag() {        
+        $configuration = new Configuration();
+        $configuration->setLineNumber(4);
+        $configuration->setColumnNumber(20);
+        $configuration->setHtmlContent($this->getFixture('sample01.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(4);
-        $extractor->setColumnNumber(20);
-        $extractor->setHtmlContent($this->getFixture('sample01.html'));
+        $extractor->setConfiguration($configuration);         
         
         $this->assertEquals(array(
             'offset' => 11,
@@ -83,11 +103,14 @@ class AgainstSampleDocumentTest extends BaseTest {
     }
     
     
-    public function testGetfromLineContainingNestedElements() {
+    public function testGetfromLineContainingNestedElements() {        
+        $configuration = new Configuration();
+        $configuration->setLineNumber(59);
+        $configuration->setColumnNumber(27);
+        $configuration->setHtmlContent($this->getFixture('sample01.html'));  
+        
         $extractor = new HtmlFragmentExtractor();
-        $extractor->setLineNumber(59);
-        $extractor->setColumnNumber(27);
-        $extractor->setHtmlContent($this->getFixture('sample01.html'));
+        $extractor->setConfiguration($configuration);         
         
         $this->assertEquals(array(
             'offset' => 18,

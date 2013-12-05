@@ -30,8 +30,7 @@ class Parser extends StringParser {
     private $columnNumber = null;
     
     private $inputString = null;
-    private $characterIndex = null;
-    
+    private $characterIndex = null;    
     
     public function parse($inputString, $lineNumber = null, $columnNumber = null) {
         $this->lineNumber = $lineNumber;
@@ -49,68 +48,16 @@ class Parser extends StringParser {
         
         $startPosition = $this->getFragmentStartPosition();
         $fragmentLength = $this->getFragmentLength();
-        
-//        var_dump($this->getCharacterIndex() - $startPosition + ($startPosition - $this->getNearestNewlineToStartPosition()), substr($inputString, $startPosition, $fragmentLength));
-//        exit();
-        
-        //$offset = $this->getCharacterIndex() - $startPosition + ($startPosition - $this->getNearestNewlineToStartPosition());
+
         $offset = $this->getCharacterIndex() - $startPosition;
         $fragment = substr($inputString, $startPosition, $fragmentLength);
-        
-        //var_dump(substr($inputString, $this->getCharacterIndex(), 14));
-//        var_dump($fragment);
-////        var_dump(substr($fragment, 0, $offset));
-////
-//////        var_dump($startPosition);
-//////        var_dump($this->getCharacterIndex());
-//        exit();
         
         return array(
             'offset' => $offset,
             'fragment' => $fragment
         );
+    }
 
-        //$focusCharacterIndex = $this->getCharacterIndexFromLineNumberAndColumnNumber();
-        var_dump($startPosition);
-        var_dump($endPosition);
-        exit();
-        
-        var_dump(substr($this->inputString, $focusCharacterIndex - 20, 40));
-        
-        //$closestStartPosition = $this->getClosestStartPositionToColumnNumber();
-        
-        //var_dump($this->elementStartPositions, $this->elementEndPositions);
-        exit();            
-        
-        $closestEndPosition = $this->getClosestEndPositionToColumnNumber($columnNumber);
-        
-        $endPosition = mb_strlen($inputString) - $closestStartPosition - (mb_strlen($inputString) - $closestEndPosition) + 1;
-        
-        return array(
-            'offset' => $closestStartPosition,
-            'fragment' => substr($inputString, $closestStartPosition, $endPosition)
-        );
-        
-        var_dump($this->elementStartPositions);
-        var_dump($this->elementEndPositions, $columnNumber, $inputString, $closestStartPosition, $closestEndPosition);
-        
-        var_dump("another case applies");
-        
-        exit();
-    }
-    
-    
-    private function getNearestNewlineToStartPosition() {
-        $startPosition = $this->getFragmentStartPosition();
-        
-        for ($characterIndex = $startPosition; $characterIndex >= 0; $characterIndex--) {
-            if ($this->inputString[$characterIndex] == "\n") {
-                return $characterIndex;
-            }
-        }
-        
-        return 0;
-    }
     
 
     /**
@@ -163,25 +110,7 @@ class Parser extends StringParser {
         }
         
         return null;
-    }
-    
-    
-    
-    private function getClosestStartPositionToColumnNumber() {
-        $focusCharacterIndex = $this->getCharacterIndexFromLineNumberAndColumnNumber();
-        $closest = null;
-        
-        //foreach ($this->elementStartPositions as)
-        
-    }
-    
-    private function getClosestEndPositionToColumnNumber($columnNumber) {
-        foreach ($this->elementEndPositions as $endPosition) {
-            if ($endPosition >= $columnNumber) {
-                return $endPosition;
-            }
-        }
-    }    
+    }   
     
     
     /**
@@ -211,12 +140,6 @@ class Parser extends StringParser {
                 $this->incrementCurrentCharacterPointer();
                 break;
         }
-        
-        
-        
-//        var_dump($this->getCurrentState());
-//        exit();
-//        var_dump($this->getCurrentCharacter());
     } 
     
     
