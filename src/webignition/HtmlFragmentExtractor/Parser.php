@@ -57,7 +57,7 @@ class Parser extends StringParser {
         $offset = $this->getCharacterIndex() - $startPosition;
         $fragment = substr($inputString, $startPosition, $fragmentLength);
         
-        var_dump(substr($inputString, $this->getCharacterIndex(), 14));
+        //var_dump(substr($inputString, $this->getCharacterIndex(), 14));
 //        var_dump($fragment);
 ////        var_dump(substr($fragment, 0, $offset));
 ////
