@@ -4,6 +4,24 @@ namespace webignition\HtmlFragmentExtractor;
 
 class HtmlFragmentExtractor {
     
+    const SCOPE_AUTO = 'auto';
+    const SCOPE_ELEMENT = 'element';
+    const SCOPE_PARENT = 'parent';
+    const SCOPE_GRANDPARENT = 'grandparent';
+    
+    /**
+     * Collection of allowed scope values
+     * 
+     * @var array
+     */
+    private $allowedScopes = array(
+        self::SCOPE_AUTO,
+        self::SCOPE_ELEMENT,
+        self::SCOPE_PARENT,
+        self::SCOPE_GRANDPARENT        
+    );
+    
+    
     /**
      *
      * @var int
@@ -30,6 +48,13 @@ class HtmlFragmentExtractor {
      * @var array
      */
     private $htmlContentLines = null;
+    
+    
+    /**
+     *
+     * @var string
+     */
+    private $scope = self::SCOPE_AUTO;
     
     
 
@@ -72,11 +97,11 @@ class HtmlFragmentExtractor {
     public function setColumnNumber($columnNumber) {
         $columnNumber = filter_var($columnNumber, FILTER_VALIDATE_INT);
         if ($columnNumber === false) {
-            throw new \InvalidArgumentException('Column number is not a number', 1);
+            throw new \InvalidArgumentException('Column number is not a number', 3);
         }
         
         if ($columnNumber < 1) {
-            throw new \InvalidArgumentException('Column number must be 1 or greater', 2);
+            throw new \InvalidArgumentException('Column number must be 1 or greater', 4);
         }
         
         $this->columnNumber = $columnNumber;
@@ -101,7 +126,7 @@ class HtmlFragmentExtractor {
      */
     public function setHtmlContent($htmlContent) {
         if (!is_string($htmlContent)) {
-            throw new \InvalidArgumentException('HTML content must be a string', 3);
+            throw new \InvalidArgumentException('HTML content must be a string', 5);
         }
         
         $this->htmlContent = $htmlContent;
@@ -164,5 +189,21 @@ class HtmlFragmentExtractor {
         }
         
         return $this->htmlContentLines;
+    }
+    
+    
+    /**
+     * 
+     * @param string $scope
+     * @return \webignition\HtmlFragmentExtractor\HtmlFragmentExtractor
+     * @throws \InvalidArgumentException
+     */
+    public function setScope($scope) {
+        if (!in_array($scope, $this->allowedScopes)) {
+            throw new \InvalidArgumentException('Scope "'.$scope.'" is not valid', 6);
+        }
+        
+        $this->scope = $scope;
+        return $this;
     }
 } 

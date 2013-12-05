@@ -13,7 +13,7 @@ class SetHtmlContentTest extends BaseTest {
     
     
     public function testSetNonStringThrowsInvalidArgumentException() {
-        $this->setExpectedException('InvalidArgumentException', 'HTML content must be a string', 3);
+        $this->setExpectedException('InvalidArgumentException', 'HTML content must be a string', 5);
         
         $extractor = new HtmlFragmentExtractor();
         $this->assertEquals($extractor, $extractor->setHtmlContent(0));        

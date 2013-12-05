@@ -12,14 +12,14 @@ class SetColumnNumberTest extends BaseTest {
     }
     
     public function testSetAsNonIntegerThrowsInvalidArgumentException() {
-        $this->setExpectedException('InvalidArgumentException', 'Column number is not a number', 1);
+        $this->setExpectedException('InvalidArgumentException', 'Column number is not a number', 3);
         
         $extractor = new HtmlFragmentExtractor();
         $this->assertEquals($extractor, $extractor->setColumnNumber("foo"));        
     }
     
     public function testSetBelowRangeThrowsInvalidArgumentException() {
-        $this->setExpectedException('InvalidArgumentException', 'Column number must be 1 or greater', 2);
+        $this->setExpectedException('InvalidArgumentException', 'Column number must be 1 or greater', 4);
         
         $extractor = new HtmlFragmentExtractor();
         $this->assertEquals($extractor, $extractor->setColumnNumber(0));        
