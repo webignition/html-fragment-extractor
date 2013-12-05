@@ -1,6 +1,6 @@
 <?php
 
-namespace webignition\Tests\HtmlFragmentExtractor\GetFragment;
+namespace webignition\Tests\HtmlFragmentExtractor\GetFragment\WithScope\Element;
 
 use webignition\HtmlFragmentExtractor\HtmlFragmentExtractor;
 use webignition\HtmlFragmentExtractor\Configuration;
@@ -13,6 +13,7 @@ class AgainstW3cValidatorResultsTest extends BaseTest {
         $configuration->setLineNumber(59);
         $configuration->setColumnNumber(14);
         $configuration->setHtmlContent($this->getFixture('sample02.html'));  
+        $configuration->setScope(Configuration::SCOPE_ELEMENT);
         
         $extractor = new HtmlFragmentExtractor();
         $extractor->setConfiguration($configuration); 
@@ -29,6 +30,7 @@ class AgainstW3cValidatorResultsTest extends BaseTest {
         $configuration->setLineNumber(115);
         $configuration->setColumnNumber(121);
         $configuration->setHtmlContent($this->getFixture('sample02.html'));  
+        $configuration->setScope(Configuration::SCOPE_ELEMENT);
         
         $extractor = new HtmlFragmentExtractor();
         $extractor->setConfiguration($configuration);
